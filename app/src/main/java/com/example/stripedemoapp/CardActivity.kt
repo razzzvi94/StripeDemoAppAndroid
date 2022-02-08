@@ -19,11 +19,11 @@ class CardActivity : AppCompatActivity() {
 
     private lateinit var paymentIntentClientSecret: String
     private lateinit var stripe: Stripe
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
-        
+
         stripe = Stripe(this, PaymentConfiguration.getInstance(applicationContext).publishableKey)
 
         startCheckout()
@@ -78,6 +78,9 @@ class CardActivity : AppCompatActivity() {
                 )
                 stripe.confirmPayment(this, confirmParams)
             }
+
+            val intent = Intent(this, LauncherActivity::class.java)
+            startActivity(intent)
         }
     }
 
