@@ -1,9 +1,9 @@
 package com.example.stripedemoapp
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.PaymentConfiguration
@@ -11,27 +11,19 @@ import com.stripe.android.PaymentIntentResult
 import com.stripe.android.Stripe
 import com.stripe.android.model.ConfirmPaymentIntentParams
 import com.stripe.android.model.StripeIntent
-import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.*
-import org.json.JSONObject
-import java.io.IOException
-
+import kotlinx.android.synthetic.main.activity_card.*
 
 val backendUrl = "http://10.0.2.2:4242"
 
-class MainActivity : AppCompatActivity() {
+class CardActivity : AppCompatActivity() {
 
     private lateinit var paymentIntentClientSecret: String
     private lateinit var stripe: Stripe
-    private val httpClient = OkHttpClient()
-    private lateinit var publishableKey: String
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        fetchPublishableKey()
-
+        setContentView(R.layout.activity_card)
+        
         stripe = Stripe(this, PaymentConfiguration.getInstance(applicationContext).publishableKey)
 
         startCheckout()
@@ -98,28 +90,5 @@ class MainActivity : AppCompatActivity() {
             builder.setPositiveButton("Ok", null)
             builder.create().show()
         }
-    }
-
-    //Fetch publishable key from server and initialise the Stripe SDK
-    private fun fetchPublishableKey() {
-        val request = Request.Builder().url(backendUrl + "config").build()
-
-        httpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                displayAlert("Request failed", "Error: $e")
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    val responseData = response.body?.string()
-                    val responseJson = responseData?.let { JSONObject(it) } ?: JSONObject()
-                    publishableKey = responseJson.getString("publishableKey")
-
-                    PaymentConfiguration.init(applicationContext, publishableKey)
-                } else {
-                    displayAlert("Request failed", "Error: $response")
-                }
-            }
-        })
     }
 }

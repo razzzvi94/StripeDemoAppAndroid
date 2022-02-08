@@ -1,0 +1,66 @@
+package com.example.stripedemoapp
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import com.stripe.android.PaymentConfiguration
+import kotlinx.android.synthetic.main.activity_launcher.*
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
+
+class LauncherActivity : AppCompatActivity() {
+
+    private val httpClient = OkHttpClient()
+    private lateinit var publishableKey: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_launcher)
+
+        fetchPublishableKey()
+        initComponents()
+    }
+
+    private fun initComponents() {
+        paymentMethodCard.setOnClickListener {
+            val intent = Intent(this, CardActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun displayAlert(title: String, message: String) {
+        runOnUiThread {
+            val builder = AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+
+            builder.setPositiveButton("Ok", null)
+            builder.create().show()
+        }
+    }
+
+    //Fetch publishable key from server and initialise the Stripe SDK
+    private fun fetchPublishableKey() {
+        val request = Request.Builder().url("$backendUrl/config").build()
+
+        httpClient.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                displayAlert("Request failed", "Error: $e")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val responseData = response.body?.string()
+                    val responseJson = responseData?.let { JSONObject(it) } ?: JSONObject()
+                    publishableKey = responseJson.getString("publishableKey")
+
+                    PaymentConfiguration.init(applicationContext, publishableKey)
+                } else {
+                    displayAlert("Request failed", "Error: $response")
+                }
+            }
+        })
+    }
+}

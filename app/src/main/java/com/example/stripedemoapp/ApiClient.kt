@@ -22,7 +22,7 @@ class ApiClient {
             }
         """.trimIndent()
         val body = requestJson.toRequestBody(mediaType)
-        val request = Request.Builder().url(backendUrl + "create-payment-intent").post(body).build()
+        val request = Request.Builder().url("$backendUrl/create-payment-intent").post(body).build()
         httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 completion(null, "$e")

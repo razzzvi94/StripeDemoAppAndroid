@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Projects/StripeDemoAppAndroid/app/src/main/res/layout/activity_card.xml" value="0.35260416666666666" />
         <entry key="..\:/Android Projects/StripeDemoAppAndroid/app/src/main/res/layout/activity_launcher.xml" value="0.35260416666666666" />
         <entry key="..\:/Android Projects/StripeDemoAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Android Projects/StripeDemoAppAndroid/app/src/main/res/layout/afterpay_clearpay_activity.xml" value="0.19583333333333333" />
+        <entry key="..\:/Android Projects/StripeDemoAppAndroid/app/src/main/res/layout/card_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Android Projects/app/src/main/res/layout/activity_main.xml" value="0.22" />
       </map>
     </option>
