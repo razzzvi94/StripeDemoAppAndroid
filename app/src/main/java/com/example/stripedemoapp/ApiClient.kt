@@ -10,6 +10,7 @@ class ApiClient {
     private val httpClient = OkHttpClient()
 
     fun createPaymentIntent(
+        amount: Double,
         paymentMethodType: String,
         currency: String,
         completion: (paymentIntentClientSecret: String?, error: String?) -> Unit
@@ -17,7 +18,8 @@ class ApiClient {
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val requestJson = """
             {
-            "currnecy": "$currency",
+            "amount": $amount,
+            "currency": "$currency",
             "paymentMethodType": "$paymentMethodType"
             }
         """.trimIndent()

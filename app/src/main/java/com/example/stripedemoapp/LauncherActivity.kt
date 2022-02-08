@@ -1,9 +1,10 @@
 package com.example.stripedemoapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.stripe.android.PaymentConfiguration
 import kotlinx.android.synthetic.main.activity_launcher.*
 import okhttp3.*
@@ -25,8 +26,13 @@ class LauncherActivity : AppCompatActivity() {
 
     private fun initComponents() {
         paymentMethodCard.setOnClickListener {
-            val intent = Intent(this, CardActivity::class.java)
-            startActivity(intent)
+            if (!transactionAmount.text.toString().isEmpty()) {
+                val intent = Intent(this, CardActivity::class.java)
+                intent.putExtra("transactionAmount", transactionAmount.text.toString().toDouble()*100)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Insert payment amount", Toast.LENGTH_LONG).show()
+            }
         }
     }
 

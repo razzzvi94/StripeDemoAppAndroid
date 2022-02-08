@@ -1,9 +1,10 @@
 package com.example.stripedemoapp
 
+import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.PaymentConfiguration
@@ -26,7 +27,9 @@ class CardActivity : AppCompatActivity() {
 
         stripe = Stripe(this, PaymentConfiguration.getInstance(applicationContext).publishableKey)
 
-        startCheckout()
+        var amount = intent.getDoubleExtra("transactionAmount", 0.0)
+
+        startCheckout(amount)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -53,8 +56,9 @@ class CardActivity : AppCompatActivity() {
         })
     }
 
-    private fun startCheckout() {
+    private fun startCheckout(amountPay: Double) {
         ApiClient().createPaymentIntent(
+            amountPay,
             "card",
             "usd",
             completion = { paymentIntentClientSecret, error ->
@@ -78,9 +82,6 @@ class CardActivity : AppCompatActivity() {
                 )
                 stripe.confirmPayment(this, confirmParams)
             }
-
-            val intent = Intent(this, LauncherActivity::class.java)
-            startActivity(intent)
         }
     }
 
@@ -90,8 +91,12 @@ class CardActivity : AppCompatActivity() {
                 .setTitle(title)
                 .setMessage(message)
 
-            builder.setPositiveButton("Ok", null)
+            builder.setPositiveButton("Ok") { _, _ ->
+                val intent = Intent(applicationContext, LauncherActivity::class.java)
+                startActivity(intent)
+            }
             builder.create().show()
+
         }
     }
 }
