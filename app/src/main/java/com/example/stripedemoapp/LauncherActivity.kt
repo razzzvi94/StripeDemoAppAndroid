@@ -28,7 +28,10 @@ class LauncherActivity : AppCompatActivity() {
         paymentMethodCard.setOnClickListener {
             if (!transactionAmount.text.toString().isEmpty()) {
                 val intent = Intent(this, CardActivity::class.java)
-                intent.putExtra("transactionAmount", transactionAmount.text.toString().toDouble()*100)
+                intent.putExtra(
+                    "transactionAmount",
+                    transactionAmount.text.toString().toDouble() * 100
+                )
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Insert payment amount", Toast.LENGTH_LONG).show()
