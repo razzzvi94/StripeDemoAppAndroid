@@ -13,7 +13,8 @@ import com.stripe.android.model.ConfirmPaymentIntentParams
 import com.stripe.android.model.StripeIntent
 import kotlinx.android.synthetic.main.activity_card.*
 
-val backendUrl = "http://10.0.2.2:4242"
+val backendUrl = "https://stripedemoserver.herokuapp.com"
+//val backendUrl = "http://10.0.2.2:4242" //For local testing with an emulator
 
 class CardActivity : AppCompatActivity() {
 
